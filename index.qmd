@@ -1,5 +1,63 @@
 ---
-title: "index"
-format: html
+title: "Computational Musicology"
+format: 
+  dashboard:
+    orientation: columns
+    theme: flatly
+    toc: false
 ---
 
+# Weekly Assignments {width=50%}
+
+## Course Assignments
+
+::: {.card}
+### Week 7: Computational Musicology and (Audio) Visualisation
+(not available right now, will be added later)
+
+[Open page](audio-visualisation.html)
+:::
+
+::: {.card}
+### Week 8: Chroma Features
+(not available right now, will be added later)
+
+[Open page](chroma-features.html)
+:::
+
+::: {.card}
+### Week 9: Timbre Features / Self-Similarity Matrices
+(not available right now, will be added later)
+
+[Open page](timbre-features-ssm.html)
+:::
+
+::: {.card}
+### Week 10: Key and Chord Estimation
+(not available right now, will be added later)
+
+[Open page](key-and-chord-estimation.html)
+:::
+
+::: {.card}
+### Week 11: Novelty Functions and Tempograms
+Analysis of Afraid to Feel by LF System
+
+[Open page](week11.html)
+:::
+
+# Portfolio {width=50%}
+
+## Portfolio
+
+### About me
+
+I am Stan Pieter van Kuik, a student at the University of Amsterdam. This page show my portfolio for the course *Computational Musicology*.
+
+### Course focus
+
+In this portfolio, I explore music using computational methods such as audio visualisation, chroma analysis, timbre features, self-similarity matrices, key estimation, chord estimation, novelty functions, and tempograms.
+
+### GitHub Repository
+
+[View repository](https://github.com/stanpietervankuik/comp_music.git)

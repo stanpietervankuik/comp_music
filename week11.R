@@ -3,7 +3,34 @@ library(compmus)
 
 afraid_to_feel_ACT <- read_csv("songs_csv/afraid_to_feel_ACT.csv")
 afraid_to_feel_DFT <- read_csv("songs_csv/afraid_to_feel_DFT.csv")
-# Novelty function
+afraid_to_feel_novelty <- read_csv("songs_csv/afraid_to_feel_novelty.csv")
+
+
+# Novelty function 1
+novelty_plot1 <- afraid_to_feel_novelty |> 
+  ggplot(aes(x = TIME, y = VALUE)) +
+  geom_line() +
+  xlim(18, 23) +                       
+  theme_minimal() +
+  labs(x = "Time (s)", y = "Novelty")
+
+novelty_plot1
+
+dir.create("plots_tempo", showWarnings = FALSE)
+ggsave("plots_tempo/afraid_to_feel_novelty1.png", novelty_plot1, width = 10, height = 4, dpi = 300)
+
+# Novelty function 2
+novelty_plot2 <- afraid_to_feel_novelty |> 
+  ggplot(aes(x = TIME, y = VALUE)) +
+  geom_line() +
+  xlim(60, 80) +                       
+  theme_minimal() +
+  labs(x = "Time (s)", y = "Novelty")
+
+novelty_plot2
+
+dir.create("plots_tempo", showWarnings = FALSE)
+ggsave("plots_tempo/afraid_to_feel_novelty2.png", novelty_plot2, width = 10, height = 4, dpi = 300)
 
 # DFT plot
 dft_plot <- afraid_to_feel_DFT |> 
@@ -31,12 +58,9 @@ act_plot <- afraid_to_feel_ACT |>
   mutate(tempo = as.numeric(tempo)) |> 
   ggplot(aes(x = TIME, y = tempo, fill = value)) +
   geom_raster() +
+  scale_y_continuous(transform = c("reciprocal", "reverse"), breaks = seq(50, 350, 50)) +    
   scale_fill_viridis_c(guide = "none") +
-  labs(
-    title = "Afraid to Feel - Autocorrelation Tempogram",
-    x = "Time (s)",
-    y = "Tempo (BPM)"
-  ) +
+  labs(x = "Time (s)", y = "Tempo (BPM)") +
   theme_classic()
 
 act_plot

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Computational Musicology</title>
+<title>Week 11: Novelty Functions and Tempograms</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,237 +23,130 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="index_files/libs/clipboard/clipboard.min.js"></script>
-<script src="index_files/libs/quarto-html/quarto.js" type="module"></script>
-<script src="index_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="index_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="index_files/libs/quarto-html/popper.min.js"></script>
-<script src="index_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="index_files/libs/quarto-html/anchor.min.js"></script>
-<link href="index_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="index_files/libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="index_files/libs/quarto-html/quarto-syntax-highlighting-dark-707d8167ce6003fca903bfe2be84ab7f.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="index_files/libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
-<script src="index_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="index_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="index_files/libs/bootstrap/bootstrap-4c3c2102feede3fae15d607cd422f12a.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="index_files/libs/bootstrap/bootstrap-dark-4c3c2102feede3fae15d607cd422f12a.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
-<link href="index_files/libs/bootstrap/bootstrap-4c3c2102feede3fae15d607cd422f12a.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
-<script src="index_files/libs/quarto-dashboard/quarto-dashboard.js"></script>
-<script src="index_files/libs/quarto-dashboard/stickythead.js"></script>
-
-
-
-<script src="index_files/libs/quarto-dashboard/web-components.js" type="module"></script>
-<script src="index_files/libs/quarto-dashboard/components.js"></script>
-
+<script src="week11_files/libs/clipboard/clipboard.min.js"></script>
+<script src="week11_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="week11_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="week11_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="week11_files/libs/quarto-html/popper.min.js"></script>
+<script src="week11_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="week11_files/libs/quarto-html/anchor.min.js"></script>
+<link href="week11_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="week11_files/libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="week11_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="week11_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="week11_files/libs/bootstrap/bootstrap-f832f4b8a09b4d648f7f04d7514f23d5.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 
 
 </head>
 
-<body class="quarto-dashboard dashboard-fill fullcontent quarto-light">
+<body class="quarto-light">
 
-<header id="quarto-dashboard-header">
-<nav class="navbar navbar-expand-md slim" data-bs-theme="dark">
-  <div class="navbar-container container-fluid">
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-controls="dashboard-collapse" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>    
-
-
-    <div class="navbar-brand-container">
-
-
-      <div class="navbar-title">
-        <div class="navbar-title-text"><a href="#">Computational Musicology</a></div>
-        
-        
-      </div>
-    </div>
-<div id="dashboard-collapse" class="navbar-collapse collapse"><ul class="navbar-nav navbar-nav-scroll me-auto" role="tablist"><li class="nav-item" role="presentation"><a id="tab-weekly-assignments" class="nav-link active" data-bs-toggle="tab" role="tab" data-bs-target="#weekly-assignments" data-scrolling="false" href="#weekly-assignments" aria-controls="weekly-assignments" aria-selected="true"><span class="nav-link-text">Weekly Assignments</span></a></li><li class="nav-item" role="presentation"><a id="tab-portfolio" class="nav-link" data-bs-toggle="tab" role="tab" data-bs-target="#portfolio" data-scrolling="false" href="#portfolio" aria-controls="portfolio" aria-selected="false"><span class="nav-link-text">Portfolio</span></a></li></ul></div></div>
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#novelty-function" id="toc-novelty-function" class="nav-link" data-scroll-target="#novelty-function">Novelty function</a>
+  <ul class="collapse">
+  <li><a href="#part-1-tempo-change-on-beat-drop" id="toc-part-1-tempo-change-on-beat-drop" class="nav-link" data-scroll-target="#part-1-tempo-change-on-beat-drop">Part 1: Tempo Change on Beat drop</a></li>
+  </ul></li>
+  <li><a href="#part-2-slowing-down-of-tempo-at-breakdown" id="toc-part-2-slowing-down-of-tempo-at-breakdown" class="nav-link" data-scroll-target="#part-2-slowing-down-of-tempo-at-breakdown">Part 2: Slowing down of tempo at breakdown</a></li>
+  <li><a href="#tempograms" id="toc-tempograms" class="nav-link" data-scroll-target="#tempograms">Tempograms</a>
+  <ul class="collapse">
+  <li><a href="#act" id="toc-act" class="nav-link" data-scroll-target="#act">ACT</a></li>
+  <li><a href="#dft" id="toc-dft" class="nav-link" data-scroll-target="#dft">DFT</a></li>
+  </ul></li>
+  </ul>
 </nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Week 11: Novelty Functions and Tempograms</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
 </header>
-<div class="page-layout-custom quarto-dashboard-content bslib-gap-spacing html-fill-container bslib-page-fill quarto-dashboard-pages">  
 
-<div class="bslib-grid-item html-fill-item tab-content bslib-grid" data-layout="fill" style="display: grid; grid-template-columns: minmax(3em, 1fr);
-grid-auto-rows: minmax(0, 1fr);">
-<div id="weekly-assignments" class="dashboard-page tab-pane show active html-fill-item html-fill-container" data-orientation="columns" aria-labelledby="tab-weekly-assignments">
-<div class="html-fill-item html-fill-container bslib-grid" style="display: grid; grid-template-columns: minmax(3em, 1fr);
-grid-auto-rows: minmax(0, 1fr);">
-<div class="html-fill-item html-fill-container bslib-grid" style="display: grid; grid-template-rows: minmax(3em, 1fr) minmax(3em, 1fr) minmax(3em, 1fr) minmax(3em, 1fr) minmax(3em, 1fr); grid-auto-columns: minmax(0, 1fr);">
-<div class="card html-fill-item html-fill-container bslib-card" data-bslib-card-init="" data-require-bs-caller="card()" data-full-screen="false">
-<div class="card-body html-fill-item html-fill-container">
-<div class="h4">
-Week
 
-7:
-
-Computational
-
-Musicology
-
-and
-
-(Audio)
-
-Visualisation
-</div>
-<p>(not available right now, will be added later)</p>
-<a href="audio-visualisation.html">Open page</a>
-</div>
-<bslib-tooltip placement="auto" bsoptions="[]" data-require-bs-version="5" data-require-bs-caller="tooltip()">
-    <template>Expand</template>
-    <span class="bslib-full-screen-enter badge rounded-pill">
-        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" style="height:1em;width:1em;" aria-hidden="true" role="img"><path d="M20 5C20 4.4 19.6 4 19 4H13C12.4 4 12 3.6 12 3C12 2.4 12.4 2 13 2H21C21.6 2 22 2.4 22 3V11C22 11.6 21.6 12 21 12C20.4 12 20 11.6 20 11V5ZM4 19C4 19.6 4.4 20 5 20H11C11.6 20 12 20.4 12 21C12 21.6 11.6 22 11 22H3C2.4 22 2 21.6 2 21V13C2 12.4 2.4 12 3 12C3.6 12 4 12.4 4 13V19Z"></path></svg>
-    </span>
-</bslib-tooltip><script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div>
-<div class="card html-fill-item html-fill-container bslib-card" data-bslib-card-init="" data-require-bs-caller="card()" data-full-screen="false">
-<div class="card-body html-fill-item html-fill-container">
-<div class="h4">
-Week
-
-8:
-
-Chroma
-
-Features
-</div>
-<p>(not available right now, will be added later)</p>
-<a href="chroma-features.html">Open page</a>
-</div>
-<bslib-tooltip placement="auto" bsoptions="[]" data-require-bs-version="5" data-require-bs-caller="tooltip()">
-    <template>Expand</template>
-    <span class="bslib-full-screen-enter badge rounded-pill">
-        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" style="height:1em;width:1em;" aria-hidden="true" role="img"><path d="M20 5C20 4.4 19.6 4 19 4H13C12.4 4 12 3.6 12 3C12 2.4 12.4 2 13 2H21C21.6 2 22 2.4 22 3V11C22 11.6 21.6 12 21 12C20.4 12 20 11.6 20 11V5ZM4 19C4 19.6 4.4 20 5 20H11C11.6 20 12 20.4 12 21C12 21.6 11.6 22 11 22H3C2.4 22 2 21.6 2 21V13C2 12.4 2.4 12 3 12C3.6 12 4 12.4 4 13V19Z"></path></svg>
-    </span>
-</bslib-tooltip><script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div>
-<div class="card html-fill-item html-fill-container bslib-card" data-bslib-card-init="" data-require-bs-caller="card()" data-full-screen="false">
-<div class="card-body html-fill-item html-fill-container">
-<div class="h4">
-Week
-
-9:
-
-Timbre
-
-Features
-
-/
-
-Self-Similarity
-
-Matrices
-</div>
-<p>(not available right now, will be added later)</p>
-<a href="timbre-features-ssm.html">Open page</a>
-</div>
-<bslib-tooltip placement="auto" bsoptions="[]" data-require-bs-version="5" data-require-bs-caller="tooltip()">
-    <template>Expand</template>
-    <span class="bslib-full-screen-enter badge rounded-pill">
-        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" style="height:1em;width:1em;" aria-hidden="true" role="img"><path d="M20 5C20 4.4 19.6 4 19 4H13C12.4 4 12 3.6 12 3C12 2.4 12.4 2 13 2H21C21.6 2 22 2.4 22 3V11C22 11.6 21.6 12 21 12C20.4 12 20 11.6 20 11V5ZM4 19C4 19.6 4.4 20 5 20H11C11.6 20 12 20.4 12 21C12 21.6 11.6 22 11 22H3C2.4 22 2 21.6 2 21V13C2 12.4 2.4 12 3 12C3.6 12 4 12.4 4 13V19Z"></path></svg>
-    </span>
-</bslib-tooltip><script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div>
-<div class="card html-fill-item html-fill-container bslib-card" data-bslib-card-init="" data-require-bs-caller="card()" data-full-screen="false">
-<div class="card-body html-fill-item html-fill-container">
-<div class="h4">
-Week
-
-10:
-
-Key
-
-and
-
-Chord
-
-Estimation
-</div>
-<p>(not available right now, will be added later)</p>
-<a href="key-and-chord-estimation.html">Open page</a>
-</div>
-<bslib-tooltip placement="auto" bsoptions="[]" data-require-bs-version="5" data-require-bs-caller="tooltip()">
-    <template>Expand</template>
-    <span class="bslib-full-screen-enter badge rounded-pill">
-        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" style="height:1em;width:1em;" aria-hidden="true" role="img"><path d="M20 5C20 4.4 19.6 4 19 4H13C12.4 4 12 3.6 12 3C12 2.4 12.4 2 13 2H21C21.6 2 22 2.4 22 3V11C22 11.6 21.6 12 21 12C20.4 12 20 11.6 20 11V5ZM4 19C4 19.6 4.4 20 5 20H11C11.6 20 12 20.4 12 21C12 21.6 11.6 22 11 22H3C2.4 22 2 21.6 2 21V13C2 12.4 2.4 12 3 12C3.6 12 4 12.4 4 13V19Z"></path></svg>
-    </span>
-</bslib-tooltip><script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div>
-<div class="card html-fill-item html-fill-container bslib-card" data-bslib-card-init="" data-require-bs-caller="card()" data-full-screen="false">
-<div class="card-body html-fill-item html-fill-container">
-<div class="h4">
-Week
-
-11:
-
-Novelty
-
-Functions
-
-and
-
-Tempograms
-</div>
-<p>Analysis of Afraid to Feel by LF System</p>
-<a href="week11.html">Open page</a>
-</div>
-<bslib-tooltip placement="auto" bsoptions="[]" data-require-bs-version="5" data-require-bs-caller="tooltip()">
-    <template>Expand</template>
-    <span class="bslib-full-screen-enter badge rounded-pill">
-        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" style="height:1em;width:1em;" aria-hidden="true" role="img"><path d="M20 5C20 4.4 19.6 4 19 4H13C12.4 4 12 3.6 12 3C12 2.4 12.4 2 13 2H21C21.6 2 22 2.4 22 3V11C22 11.6 21.6 12 21 12C20.4 12 20 11.6 20 11V5ZM4 19C4 19.6 4.4 20 5 20H11C11.6 20 12 20.4 12 21C12 21.6 11.6 22 11 22H3C2.4 22 2 21.6 2 21V13C2 12.4 2.4 12 3 12C3.6 12 4 12.4 4 13V19Z"></path></svg>
-    </span>
-</bslib-tooltip><script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div>
-</div>
-</div>
-</div><div id="portfolio" class="dashboard-page tab-pane grid-skip html-fill-item html-fill-container" data-orientation="columns" aria-labelledby="tab-portfolio">
-<div class="html-fill-item html-fill-container bslib-grid" style="display: grid; grid-template-columns: minmax(3em, 1fr);
-grid-auto-rows: minmax(0, 1fr);">
-<div class="html-fill-item html-fill-container bslib-grid" style="display: grid; grid-template-rows: minmax(3em, max-content) minmax(3em, max-content) minmax(3em, max-content); grid-auto-columns: minmax(0, 1fr);">
-<div class="html-fill-item html-fill-container bslib-grid" style="display: grid; grid-template-columns: minmax(3em, 1fr);
-grid-auto-rows: minmax(0, 1fr);">
-<div class="card html-fill-item html-fill-container bslib-card" data-fill="false" data-bslib-card-init="" data-require-bs-caller="card()" data-full-screen="false">
-<div class="card-body html-fill-item html-fill-container">
-<p>I am Stan Pieter van Kuik, a student at the University of Amsterdam. This page show my portfolio for the course <em>Computational Musicology</em>.</p>
-</div>
-<bslib-tooltip placement="auto" bsoptions="[]" data-require-bs-version="5" data-require-bs-caller="tooltip()">
-    <template>Expand</template>
-    <span class="bslib-full-screen-enter badge rounded-pill">
-        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" style="height:1em;width:1em;" aria-hidden="true" role="img"><path d="M20 5C20 4.4 19.6 4 19 4H13C12.4 4 12 3.6 12 3C12 2.4 12.4 2 13 2H21C21.6 2 22 2.4 22 3V11C22 11.6 21.6 12 21 12C20.4 12 20 11.6 20 11V5ZM4 19C4 19.6 4.4 20 5 20H11C11.6 20 12 20.4 12 21C12 21.6 11.6 22 11 22H3C2.4 22 2 21.6 2 21V13C2 12.4 2.4 12 3 12C3.6 12 4 12.4 4 13V19Z"></path></svg>
-    </span>
-</bslib-tooltip><script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div>
-</div>
-<div class="html-fill-item html-fill-container bslib-grid" style="display: grid; grid-template-columns: minmax(3em, 1fr);
-grid-auto-rows: minmax(0, 1fr);">
-<div class="card html-fill-item html-fill-container bslib-card" data-fill="false" data-bslib-card-init="" data-require-bs-caller="card()" data-full-screen="false">
-<div class="card-body html-fill-item html-fill-container">
-<p>In this portfolio, I explore music using computational methods such as audio visualisation, chroma analysis, timbre features, self-similarity matrices, key estimation, chord estimation, novelty functions, and tempograms.</p>
-</div>
-<bslib-tooltip placement="auto" bsoptions="[]" data-require-bs-version="5" data-require-bs-caller="tooltip()">
-    <template>Expand</template>
-    <span class="bslib-full-screen-enter badge rounded-pill">
-        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" style="height:1em;width:1em;" aria-hidden="true" role="img"><path d="M20 5C20 4.4 19.6 4 19 4H13C12.4 4 12 3.6 12 3C12 2.4 12.4 2 13 2H21C21.6 2 22 2.4 22 3V11C22 11.6 21.6 12 21 12C20.4 12 20 11.6 20 11V5ZM4 19C4 19.6 4.4 20 5 20H11C11.6 20 12 20.4 12 21C12 21.6 11.6 22 11 22H3C2.4 22 2 21.6 2 21V13C2 12.4 2.4 12 3 12C3.6 12 4 12.4 4 13V19Z"></path></svg>
-    </span>
-</bslib-tooltip><script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div>
-</div>
-<div class="html-fill-item html-fill-container bslib-grid" style="display: grid; grid-template-columns: minmax(3em, 1fr);
-grid-auto-rows: minmax(0, 1fr);">
-<div class="card html-fill-item html-fill-container bslib-card" data-fill="false" data-bslib-card-init="" data-require-bs-caller="card()" data-full-screen="false">
-<div class="card-body html-fill-item html-fill-container">
-<a href="https://github.com/stanpietervankuik/comp_music.git">View repository</a>
-</div>
-<bslib-tooltip placement="auto" bsoptions="[]" data-require-bs-version="5" data-require-bs-caller="tooltip()">
-    <template>Expand</template>
-    <span class="bslib-full-screen-enter badge rounded-pill">
-        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" style="height:1em;width:1em;" aria-hidden="true" role="img"><path d="M20 5C20 4.4 19.6 4 19 4H13C12.4 4 12 3.6 12 3C12 2.4 12.4 2 13 2H21C21.6 2 22 2.4 22 3V11C22 11.6 21.6 12 21 12C20.4 12 20 11.6 20 11V5ZM4 19C4 19.6 4.4 20 5 20H11C11.6 20 12 20.4 12 21C12 21.6 11.6 22 11 22H3C2.4 22 2 21.6 2 21V13C2 12.4 2.4 12 3 12C3.6 12 4 12.4 4 13V19Z"></path></svg>
-    </span>
-</bslib-tooltip><script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div><div id="3ade8a4a-fb1d-4a6c-8409-ac45482d5fc9" class="hidden html-fill-item html-fill-container">
-
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>In this page, I explore novelty functions and tempograms for Afraid to Feel by LF System. The goal is to compare local peaks in novelty with tempo-related representations from both the DFT and ACT methods. I chose this song because it is one of the few electronic songs I know that seems to contain a clear tempo change. That makes it a good choice for examining whether these representations actually capture that change.</p>
+</section>
+<section id="novelty-function" class="level2">
+<h2 class="anchored" data-anchor-id="novelty-function">Novelty function</h2>
+<section id="part-1-tempo-change-on-beat-drop" class="level3">
+<h3 class="anchored" data-anchor-id="part-1-tempo-change-on-beat-drop">Part 1: Tempo Change on Beat drop</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="week11_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
 </div>
 </div>
 </div>
+<p>This excerpt focuses on the first drop in the song. A clear pattern in the novelty curve is that the peaks occur closer together after the drop than before it. This suggests that events in the signal are happening more frequently, which is consistent with a tempo increase. In other words, the novelty function seems to reflect the change I hear in the track quite well in this section.</p>
+</section>
+</section>
+<section id="part-2-slowing-down-of-tempo-at-breakdown" class="level2">
+<h2 class="anchored" data-anchor-id="part-2-slowing-down-of-tempo-at-breakdown">Part 2: Slowing down of tempo at breakdown</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="week11_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
 </div>
 </div>
 </div>
+<p>This excerpt shows the section where I hear the tempo slow down during the breakdown. I expected to see the same kind of increase in distance between peaks as in the first novelty plot, but that pattern is much less obvious here. A likely explanation is that this section is less strongly percussive, so there are fewer clear onsets for the novelty function to detect. As a result, the peaks are less sharp and the tempo change is harder to observe directly from the novelty curve alone.</p>
+</section>
+<section id="tempograms" class="level2">
+<h2 class="anchored" data-anchor-id="tempograms">Tempograms</h2>
+<section id="act" class="level3">
+<h3 class="anchored" data-anchor-id="act">ACT</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="week11_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The ACT makes the tempo changes in the song quite clear. Around t = 20 s, the first drop shows a visible shift in the dominant tempo region, and another change can be seen around t = 60 s, where the breakdown begins. The strongest tempo bands appear to lie around roughly 100 BPM and 125 BPM (this matches online bpm info) . Overall, the ACT representation captures the large-scale tempo structure of the song quite well.</p>
+</section>
+<section id="dft" class="level3">
+<h3 class="anchored" data-anchor-id="dft">DFT</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="week11_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The DFT shows a very similar general pattern. Here too, the tempo change around t = 20 s and the breakdown around t = 60 s can be identified. Compared to the ACT, the DFT representation seems to emphasize tempo harmonics more clearly, while the ACT gives relatively more prominence to subharmonic relationships. This means that both representations reflect the same rhythmic structure, but they highlight different aspects of the tempo information</p>
+</section>
+</section>
 
-
+</main>
+<!-- /main column -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
@@ -654,16 +547,8 @@ grid-auto-rows: minmax(0, 1fr);">
     }
   });
   </script>
-</div> <!-- /container fluid -->
+</div> <!-- /content -->
 
-<script type="application/javascript">
-window.document.addEventListener("DOMContentLoaded", function (_event) {
-  if (window.bslib.Card) {
-    window.bslib.Card.initializeAllCards();
-  }
-}); 
-</script>
-  
 
 
 
