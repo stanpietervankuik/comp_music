@@ -1,0 +1,147 @@
+---
+title: "Week 12: Hierarchical Clustering"
+format:
+  html:
+    theme: flatly
+    toc: true
+    toc-location: right
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+## Introduction
+
+In this page, I explore hierarchical clustering on my Spotify Wrapped 2025 dataset using Spotify audio features. The goal is to see whether my most listened songs can be grouped into meaningful clusters based on features such as danceability, energy, loudness, acousticness, and valence.
+
+
+```{r}
+library(tidyverse)
+library(tidymodels)
+library(ggdendro)
+library(heatmaply)
+library(htmlwidgets)
+library(tibble)
+
+wrapped_2025 <- read_csv("songs_csv/wrapped_2025.csv")
+
+dir.create("plots_clustering", showWarnings = FALSE)
+
+```
+
+```{r}
+wrapped_small <- wrapped_2025 |>
+  select(
+    `Track Name`,
+    `Artist Name(s)`,
+    Danceability,
+    Energy,
+    Loudness,
+    Speechiness,
+    Acousticness,
+    Instrumentalness,
+    Liveness,
+    Valence,
+    Tempo,
+    `Duration (ms)`
+  ) |>
+  drop_na()
+```
+
+```{r}
+wrapped_rec <- recipe(
+  ~ Danceability + Energy + Loudness + Speechiness +
+    Acousticness + Instrumentalness + Liveness +
+    Valence + Tempo + `Duration (ms)`,
+  data = wrapped_small
+) |>
+  step_center(all_numeric_predictors()) |>
+  step_scale(all_numeric_predictors())
+
+wrapped_prep <- wrapped_rec |>
+  prep()
+
+wrapped_baked <- wrapped_prep |>
+  bake(new_data = NULL) |>
+  mutate(label = paste(wrapped_small$`Track Name`, wrapped_small$`Artist Name(s)`, sep = " - "))
+
+wrapped_mat <- wrapped_baked |>
+  column_to_rownames("label")
+
+wrapped_dist <- wrapped_mat |>
+  dist(method = "euclidean")
+```
+
+## Plots
+
+```{r}
+wrapped_single <- wrapped_dist |>
+  hclust(method = "single")
+
+plot_single <- ggdendrogram(wrapped_single) +
+  labs(title = "Spotify Wrapped 2025 - Single linkage") +
+  theme_minimal()
+
+plot_single
+
+ggsave(
+  "plots_clustering/wrapped_single_linkage.png",
+  plot = plot_single,
+  width = 12,
+  height = 8,
+  dpi = 300
+)
+```
+
+The single linkage dendrogram is the least convincing of the three. It shows a clear chaining effect, where songs are connected one by one into a long structure instead of forming a few compact groups. This makes the clustering difficult to interpret, because the method mainly looks at the closest pair of points when merging clusters. As a result, even fairly dissimilar songs can end up connected through intermediate neighbors.
+
+```{r}
+wrapped_average <- wrapped_dist |>
+  hclust(method = "average")
+
+plot_average <- ggdendrogram(wrapped_average) +
+  labs(title = "Spotify Wrapped 2025 - Average linkage") +
+  theme_minimal()
+
+plot_average
+
+ggsave(
+  "plots_clustering/wrapped_average_linkage.png",
+  plot = plot_average,
+  width = 12,
+  height = 8,
+  dpi = 300
+)
+```
+
+The average linkage dendrogram is more balanced and much easier to read than the single linkage result. Several medium-sized branches remain separate until relatively high in the tree, which suggests that there is some real grouping structure in the data. However, the boundaries between larger clusters are still somewhat soft, since many branches merge at similar heights.
+
+```{r}
+wrapped_complete <- wrapped_dist |>
+  hclust(method = "complete")
+
+plot_complete <- ggdendrogram(wrapped_complete) +
+  labs(title = "Spotify Wrapped 2025 - Complete linkage") +
+  theme_minimal()
+
+plot_complete
+
+ggsave(
+  "plots_clustering/wrapped_complete_linkage.png",
+  plot = plot_complete,
+  width = 12,
+  height = 8,
+  dpi = 300
+)
+```
+
+The complete linkage dendrogram gives the clearest cluster structure of the three methods. Compared to average linkage, the larger groups remain separate until higher up in the tree, which suggests that the resulting clusters are more compact and internally consistent. This makes complete linkage the most convincing method for my Wrapped dataset
+
+## Conclusion
+
+Comparing the three methods, single linkage appears least useful because it mainly creates a chaining structure rather than clearly separated groups. Average linkage gives a more balanced tree and suggests that there is some subgroup structure in the data, but the boundaries between clusters are still somewhat unclear. Complete linkage produces the clearest separation between the larger branches and therefore seems the most interpretable method for this dataset.
+
+## Disclaimer
+
+This week’s homework is somewhat less in depth than I would have liked. Because I am currently preparing for multiple exams and deadlines next week, I had to keep this analysis a bit more concise than usual. I hope the core steps and reasoning are still clear, and I hope this is okay.

@@ -14,29 +14,21 @@ format:
 ::: {.card}
 ### Week 7: Computational Musicology and (Audio) Visualisation
 (not available right now, will be added later)
-
-[Open page](audio-visualisation.html)
 :::
 
 ::: {.card}
 ### Week 8: Chroma Features
 (not available right now, will be added later)
-
-[Open page](chroma-features.html)
 :::
 
 ::: {.card}
 ### Week 9: Timbre Features / Self-Similarity Matrices
 (not available right now, will be added later)
-
-[Open page](timbre-features-ssm.html)
 :::
 
 ::: {.card}
 ### Week 10: Key and Chord Estimation
 (not available right now, will be added later)
-
-[Open page](key-and-chord-estimation.html)
 :::
 
 ::: {.card}
@@ -44,6 +36,15 @@ format:
 Analysis of Afraid to Feel by LF System
 
 [Open page](week11.html)
+
+:::
+
+::: {.card}
+### Week 12: Classification and clustering
+Clustering my spotify 2025 wrapped 
+
+[Open page](week12.html)
+
 :::
 
 # Portfolio {width=50%}
