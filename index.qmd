@@ -50,9 +50,9 @@ Clustering my Spotify 2025 Wrapped -  [Open page](week12.html)
 ::: {.card}
 
 ### About me
-My name is Stan Pieter van Kuik, and I am a 23-year-old Bèta-gamma student with a major in Artificial Intelligence. I live in Amsterdam and have a strong love for music, both as a listener and as a creator.
+My name is Stan Pieter van Kuik, and I am a 23-year-old Bèta-gamma student with a major in Artificial Intelligence. I live in Amsterdam and have a strong love for music.
 
-Besides studying, I enjoy producing my own music. Some of my the songs I made can be found on [Spotify](https://open.spotify.com/artist/0BBiXpXwpy9x3c0XsUWVRt) - the production quality is definitely not perfect, and most of them are quite old, but they still reflect an important personal side of my relationship with music. I hope you enjoy exploring this portfolio as much as I enjoyed making it.
+Besides listening to it, I enjoy creating my own music. Some of my the songs I made can be found on [Spotify](https://open.spotify.com/artist/0BBiXpXwpy9x3c0XsUWVRt) - the production quality is definitely not perfect, and most of them are quite old, but they still reflect an important personal side of my relationship with music. I hope you enjoy exploring this portfolio as much as I enjoyed making it.
 
 ### About This Portfolio
 This portfolio explores whether my listening behavior differs between winter and summer. It is based on six playlists divided by both season and genre: chill, hip hop, and dance. The analyses move from a broad corpus exploration to more detailed feature analyses and finally to classification and reflection. You can find more information on the portfolio background if you press the link below. 
