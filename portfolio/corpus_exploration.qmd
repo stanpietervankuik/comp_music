@@ -253,20 +253,3 @@ ggplot(corpus, aes(x = playlist, y = Loudness, fill = season)) +
 
 Loudness appears to vary less across the playlists than many of the other Spotify features. The distributions are fairly similar overall, with only modest differences in median and spread. A likely explanation is that many tracks on Spotify are mastered according to similar modern production standards, which tend to keep perceived loudness relatively high across genres. As a result, loudness may be less informative here for distinguishing between playlists than features such as energy, valence, or acousticness.
 
-### Liveness
-
-Liveness is Spotify’s estimate of how likely a track is to be a live recording rather than a studio recording. Higher values suggest more characteristics associated with live performance, such as audience noise or room ambience.
-
-```{r}
-
-ggplot(corpus, aes(x = playlist, y = Liveness, fill = season)) +
-  geom_boxplot(alpha = 0.8) +
-  scale_fill_manual(values = season_colors) +
-  labs(
-    title = "Liveness by Playlist",
-    x = "Playlist",
-    y = "Liveness"
-  ) +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-```

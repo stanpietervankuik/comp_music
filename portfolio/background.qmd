@@ -29,4 +29,4 @@ The dashboard is intended to answer a number of related questions. First, it exp
 
 The portfolio is organized in several steps. It begins with a general exploration of the corpus using Spotify track-level features. After that, I will examine the corpus in more detail through feature-specific analyses, focusing on chroma features, loudness, timbre features, and temporal features. These analyses move from a broad overview toward more detailed musical representations.
 
-After the feature analyses, I will return to the corpus as a whole. At that stage, I will use classification and clustering methods to investigate whether broader computational patterns can be identified across the playlists and seasons. Finally, I will reflect on what I have learned from the analysis and draw conclusions about the corpus as a whole.
+After the feature analyses, I will return to the corpus as a whole. At that stage, I will use classification investigate whether broader computational patterns can be identified across the playlists and seasons. Finally, I will reflect on what I have learned from the analysis and draw conclusions about the corpus as a whole.

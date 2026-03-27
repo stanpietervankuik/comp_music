@@ -108,10 +108,10 @@ find_outliers <- function(data, variable) {
 }
 ```
 
-# Introduction
+## Introduction
 Where in last chapter I mainly focused on individual song features, I will now continue on the corpus exploration and dive deeper into corpus wide properties. We will do this by using classification. I chose classification rather than clustering because the main goal of this portfolio is to test whether my listening behavior differs between winter and summer. Since these seasonal labels are already known, classification is a more direct fit, as it allows me to evaluate whether Spotify features can actually distinguish between the two seasons. Clustering is more exploratory, since it searches for groups without using predefined labels, and is therefore less directly aligned with my main question.
 
-# Classification
+## Classification
 
 I will use random forests to test whether Spotify track-level features can distinguish between my winter and summer playlists within each genre. By building separate classifiers for chill, hip hop, and dance, I can examine whether the winter-versus-summer distinction is equally clear across genres, or whether some genres show a much stronger seasonal signal than others. In addition to the classification results themselves, the models also provide feature-importance scores, which help show which Spotify variables contribute most strongly to the seasonal separation.
 
@@ -233,7 +233,7 @@ rf_chill$importance |>
   )
 ```
 
-The feature-importance plot suggests that the seasonal distinction in Chill is driven most strongly by valence and speechiness. Valence stands out as the single most important feature by a clear margin, while speechiness is the second strongest predictor. **This fits well with the earlier corpus exploration, where summer chill appeared more positive overall and winter chill extended further toward more speech-like material.** The remaining features, such as tempo, loudness, and energy, still contribute to the classification, but they seem to play a more secondary role.
+The feature-importance plot suggests that the seasonal distinction in Chill is driven most strongly by valence and speechiness. Valence stands out as the single most important feature by a clear margin, while speechiness is the second strongest predictor. This fits well with the earlier corpus exploration, where summer chill had higher valence and winter chill spread out a lot more for speechiness. The remaining features, such as tempo, loudness, and energy, still contribute to the classification, but they seem to play a more secondary role.
 
 ```{r}
 corpus |>
@@ -267,7 +267,7 @@ rf_hiphop$fit |>
   get_pr()
 ```
 
-The classification results for Hip Hop are clearly weaker than for Chill. The precision and recall scores are lower overall, especially for Winter, which has a precision of 0.56 and a recall of only 0.483. This means that the model misses a fairly large share of the actual winter hip hop songs. Summer performs somewhat better, with a precision of 0.605 and a recall of 0.676, but the separation is still only moderate. The mosaic plot reflects this as well: the correctly classified areas are only somewhat larger than the misclassified ones, which suggests that winter and summer hip hop songs overlap quite strongly in feature space.
+The classification results for Hip Hop are clearly weaker than for Chill. The precision and recall scores are lower overall, especially for Winter, which has a precision of 0.56 and a recall of only 0.483. This means that the model misses a fairly large share of the actual winter hip hop songs. Summer performs somewhat better, with a precision of 0.605 and a recall of 0.676, but the separation is still only moderate. The mosaic plot reflects this as well: the correctly classified areas are only somewhat larger than the misclassified ones, which suggests that winter and summer hip hop songs overlap quite strongly in feature space. This overlap is in line with what we saw in the corpus explanation, as there were no clear differences between summer and winter hip hop in the feature boxplots.
 
 ```{r}
 rf_hiphop$importance |>
@@ -300,7 +300,7 @@ rf_dance$fit |>
   get_pr()
 ```
 
-The classification results for Dance are clearly stronger than for Hip Hop and also somewhat stronger than for Chill. The precision scores are similar for Winter and Summer, which suggests that when the model predicts a season, it is pretty equally reliable for both classes. The recall values tell a more uneven story, however. Summer reaches a recall of 0.811, while Winter only reaches 0.648. This means that the model is much better at recovering the actual summer dance songs than the actual winter dance songs. In practice, a relatively large share of winter tracks is still being classified as summer, even though predictions labeled as Winter are fairly accurate when they do occur. The mosaic plot reflects this as well: the correctly classified areas are clearly larger than the misclassified ones overall
+The classification results for Dance are clearly stronger than for Hip Hop and also somewhat stronger than for Chill. The precision scores are similar for Winter and Summer, which suggests that when the model predicts a season, it is pretty equally reliable for both classes. The recall values tell a more uneven story, however. Summer reaches a recall of 0.811, while Winter only reaches 0.648. This means that the model is much better at recovering the actual summer dance songs than the actual winter dance songs. In practice, a relatively large share of winter tracks is still being classified as summer, even though predictions labeled as Winter are fairly accurate when they do occur. The mosaic plot reflects this as well: the correctly classified areas are clearly larger than the misclassified ones overall.
 
 
 ```{r}
@@ -316,7 +316,7 @@ rf_dance$importance |>
   )
 ```
 
-The feature-importance plot shows that the seasonal distinction in Dance is driven most strongly by tempo. It stands out by a large margin as the single most important predictor, with energy clearly in second place. After that, the remaining features contribute much less and are relatively similar in importance. This suggests that the winter-versus-summer separation in dance music is mainly tied to differences in speed and intensity, rather than to a broad combination of equally strong features.
+The feature-importance plot shows that the seasonal distinction in Dance is driven most strongly by tempo. It stands out by a large margin as the single most important predictor, with energy clearly in second place. After that, the remaining features contribute much less and are relatively similar in importance. This suggests that the winter-versus-summer separation in dance music is mainly tied to differences in speed and intensity, rather than to a broad combination of equally strong features. We also saw in the earlier corpus exploration that winter dance songs had higher tempo and energy on average, which fits well with these classification results.
 
 ```{r}
 dance_misclassified_ids <- rf_dance$fit |>
