@@ -50,7 +50,7 @@ Clustering my Spotify 2025 Wrapped -  [Open page](week12.html)
 ::: {.card}
 
 ### About me
-My name is Stan Pieter van Kuik, and I am a 23-year-old Bèta-gamma student with a major in Artificial Intelligence. I live in Amsterdam and have a strong love for music.
+My name is Stan Pieter van Kuik and I am a 23-year-old Bèta-Gamma student with a major in Artificial Intelligence. I live in Amsterdam and have a strong love for music.
 
 Besides listening to it, I enjoy creating my own music. Some of my the songs I made can be found on [Spotify](https://open.spotify.com/artist/0BBiXpXwpy9x3c0XsUWVRt) - the production quality is definitely not perfect, and most of them are quite old, but they still reflect an important personal side of my relationship with music. I hope you enjoy exploring this portfolio as much as I enjoyed making it.
 
