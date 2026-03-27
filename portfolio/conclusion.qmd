@@ -1,0 +1,12 @@
+---
+title: "Conclusion"
+format:
+  html:
+    theme: lumen
+    toc: true
+    toc-location: right
+execute:
+  echo: false
+  warning: false
+  message: false
+---

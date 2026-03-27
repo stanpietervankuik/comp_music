@@ -1,0 +1,293 @@
+---
+title: "Feature Analysis"
+format:
+  html:
+    theme: lumen
+    toc: true
+    toc-location: right
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r}
+library(tidyverse)
+library(compmus)
+
+
+season_colors <- c(
+  "Winter" = "#3C6980",
+  "Summer" = "#D1945E"
+)
+
+summer_chill <- read_csv("Summer_Chill.csv") |>
+  select(-`Release Date`) |>
+  mutate(
+    season = "Summer",
+    genre = "Chill",
+    playlist = "Summer Chill"
+  )
+
+winter_chill <- read_csv("Winter_Chill.csv") |>
+  select(-`Release Date`) |>
+  mutate(
+    season = "Winter",
+    genre = "Chill",
+    playlist = "Winter Chill"
+  )
+
+summer_dance <- read_csv("Summer_Dance.csv") |>
+  select(-`Release Date`) |>
+  mutate(
+    season = "Summer",
+    genre = "Dance",
+    playlist = "Summer Dance"
+  )
+
+winter_dance <- read_csv("Winter_Dance.csv") |>
+  select(-`Release Date`) |>
+  mutate(
+    season = "Winter",
+    genre = "Dance",
+    playlist = "Winter Dance"
+  )
+
+summer_hip_hop <- read_csv("Summer_Hip_Hop.csv") |>
+  select(-`Release Date`) |>
+  mutate(
+    season = "Summer",
+    genre = "Hip Hop",
+    playlist = "Summer Hip Hop"
+  )
+
+winter_hip_hop <- read_csv("Winter_Hip_Hop.csv") |>
+  select(-`Release Date`) |>
+  mutate(
+    season = "Winter",
+    genre = "Hip Hop",
+    playlist = "Winter Hip Hop"
+  )
+
+corpus <- bind_rows(
+  summer_chill,
+  winter_chill,
+  summer_dance,
+  winter_dance,
+  summer_hip_hop,
+  winter_hip_hop
+) |>
+  mutate(
+    season = factor(season, levels = c("Winter", "Summer")),
+    genre = factor(genre, levels = c("Chill", "Hip Hop", "Dance")),
+    playlist = factor(
+      playlist,
+      levels = c(
+        "Winter Chill", "Summer Chill",
+        "Winter Hip Hop", "Summer Hip Hop",
+        "Winter Dance", "Summer Dance"
+      )
+    )
+  )
+
+find_outliers <- function(data, variable) {
+  split(data, data$playlist) |>
+    purrr::imap_dfr(~ {
+      outlier_values <- boxplot.stats(.x[[variable]])$out
+
+      .x |>
+        filter(.data[[variable]] %in% outlier_values) |>
+        select(
+          playlist,
+          `Track Name`,
+          `Artist Name(s)`,
+          all_of(variable)
+        )
+    })
+}
+```
+
+
+```{r}
+find_outliers(corpus, "Acousticness") |>
+  filter(playlist == "Winter Dance")
+```
+
+
+```{r}
+find_outliers(corpus, "Tempo") |>
+  filter(playlist == "Summer Chill")
+```
+
+
+```{r}
+find_outliers(corpus, "Valence") |>
+  filter(playlist == "Summer Chill")
+```
+
+
+```{r}
+find_outliers(corpus, "Loudness") |>
+  filter(playlist == "Winter Dance")
+```
+
+```{r}
+find_outliers(corpus, "Liveness") |>
+  filter(playlist == "Winter Dance")
+```
+
+
+```{r}
+winter_dance |>
+  ggplot(aes(x = Acousticness, y = Loudness, label = `Track Name`)) +
+  geom_point(color = "#BF6858", size = 1.5, alpha = 0.8) +
+  geom_text(vjust = -0.5, size = 2.8, check_overlap = TRUE) +
+  labs(
+    title = "Winter Dance: Loudness vs Acousticness",
+    x = "Acousticness",
+    y = "Loudness (dB)"
+  ) +
+  theme_minimal()
+```
+
+
+
+```{r}
+winter_dance |>
+  ggplot(aes(x = Acousticness, y = Energy, label = `Track Name`)) +
+  geom_point(color = "#8BB061", size = 1.5, alpha = 0.8) +
+  geom_text(vjust = -0.5, size = 2.8, check_overlap = TRUE) +
+  labs(
+    title = "Winter Dance: Energy vs Acousticness",
+    x = "Acousticness",
+    y = "Energy"
+  ) +
+  theme_minimal()
+```
+
+
+
+```{r}
+library(tidyverse)
+library(compmus)
+
+
+fever_pitch <- read_csv("../songs_csv/fever_pitch_MFCC.csv")
+like_me <- read_csv("../songs_csv/like_me_MFCC.csv")
+pass_on_over <- read_csv("../songs_csv/pass_on_over_MFCC.csv")
+talk_to_me <- read_csv("../songs_csv/talk_to_me_MFCC.csv")
+```
+
+```{r}
+fever_pitch_cepstrogram <- fever_pitch |>
+  compmus_wrangle_timbre() |>
+  mutate(timbre = map(timbre, compmus_normalise, "manhattan")) |>
+  compmus_gather_timbre() |>
+  ggplot(aes(
+    x = start + duration / 2,
+    width = duration,
+    y = mfcc,
+    fill = value
+  )) +
+  geom_tile() +
+  labs(
+    title = "Fever Pitch - Cepstrogram",
+    x = "Time (s)",
+    y = NULL,
+    fill = "Magnitude"
+  ) +
+  scale_fill_viridis_c() +
+  theme_classic()
+
+fever_pitch_cepstrogram
+
+```
+
+
+```{r}
+like_me_cepstrogram <- like_me |>
+  compmus_wrangle_timbre() |>
+  mutate(timbre = map(timbre, compmus_normalise, "manhattan")) |>
+  compmus_gather_timbre() |>
+  ggplot(aes(
+    x = start + duration / 2,
+    width = duration,
+    y = mfcc,
+    fill = value
+  )) +
+  geom_tile() +
+  labs(
+    title = "like me - Cepstrogram",
+    x = "Time (s)",
+    y = NULL,
+    fill = "Magnitude"
+  ) +
+  scale_fill_viridis_c() +
+  theme_classic()
+
+like_me_cepstrogram
+```
+
+
+```{r}
+
+pass_on_over_cepstrogram <- pass_on_over |>
+  compmus_wrangle_timbre() |>
+  mutate(timbre = map(timbre, compmus_normalise, "manhattan")) |>
+  compmus_gather_timbre() |>
+  ggplot(aes(
+    x = start + duration / 2,
+    width = duration,
+    y = mfcc,
+    fill = value
+  )) +
+  geom_tile() +
+  labs(
+    title = "pass on over - Cepstrogram",
+    x = "Time (s)",
+    y = NULL,
+    fill = "Magnitude"
+  ) +
+  scale_fill_viridis_c() +
+  theme_classic()
+
+pass_on_over_cepstrogram
+```
+
+```{r}
+talk_to_me_cepstrogram <- talk_to_me |>
+  compmus_wrangle_timbre() |>
+  mutate(timbre = map(timbre, compmus_normalise, "manhattan")) |>
+  compmus_gather_timbre() |>
+  ggplot(aes(
+    x = start + duration / 2,
+    width = duration,
+    y = mfcc,
+    fill = value
+  )) +
+  geom_tile() +
+  labs(
+    title = "talk to me - Cepstrogram",
+    x = "Time (s)",
+    y = NULL,
+    fill = "Magnitude"
+  ) +
+  scale_fill_viridis_c() +
+  theme_classic()
+
+
+talk_to_me_cepstrogram
+```
+
+
+```{r}
+find_outliers(corpus, "Energy") |>
+  filter(playlist == "Summer Dance")
+```
+
+
+
+```{r}
+find_outliers(corpus, "Speechiness") |>
+  filter(playlist == "Summer Hip Hop")
+```

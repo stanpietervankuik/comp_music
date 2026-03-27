@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Feature Analysis</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="feature_analysis_files/libs/clipboard/clipboard.min.js"></script>
+<script src="feature_analysis_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="feature_analysis_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="feature_analysis_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="feature_analysis_files/libs/quarto-html/popper.min.js"></script>
+<script src="feature_analysis_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="feature_analysis_files/libs/quarto-html/anchor.min.js"></script>
+<link href="feature_analysis_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="feature_analysis_files/libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="feature_analysis_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="feature_analysis_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="feature_analysis_files/libs/bootstrap/bootstrap-a5cc46ccaf4f09d2973d35409a5d0150.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#outlier-analysis" id="toc-outlier-analysis" class="nav-link" data-scroll-target="#outlier-analysis">Outlier analysis</a>
+  <ul class="collapse">
+  <li><a href="#acousticness-in-winter-dance" id="toc-acousticness-in-winter-dance" class="nav-link" data-scroll-target="#acousticness-in-winter-dance">Acousticness in Winter Dance</a></li>
+  <li><a href="#tempo-in-summer-chill" id="toc-tempo-in-summer-chill" class="nav-link" data-scroll-target="#tempo-in-summer-chill">Tempo in Summer Chill</a></li>
+  </ul></li>
+  <li><a href="#clocks---coldplay" id="toc-clocks---coldplay" class="nav-link" data-scroll-target="#clocks---coldplay">Clocks - Coldplay</a>
+  <ul class="collapse">
+  <li><a href="#euclidean-chromagram" id="toc-euclidean-chromagram" class="nav-link" data-scroll-target="#euclidean-chromagram">Euclidean chromagram</a></li>
+  <li><a href="#cepstrogram" id="toc-cepstrogram" class="nav-link" data-scroll-target="#cepstrogram">Cepstrogram</a></li>
+  <li><a href="#timbre-self-similarity-matrix" id="toc-timbre-self-similarity-matrix" class="nav-link" data-scroll-target="#timbre-self-similarity-matrix">Timbre self-similarity matrix</a></li>
+  <li><a href="#chroma-self-similarity-matrix" id="toc-chroma-self-similarity-matrix" class="nav-link" data-scroll-target="#chroma-self-similarity-matrix">Chroma self-similarity matrix</a></li>
+  <li><a href="#interpretation-1" id="toc-interpretation-1" class="nav-link" data-scroll-target="#interpretation-1">Interpretation</a></li>
+  </ul></li>
+  <li><a href="#afraid-to-feel---lf-system" id="toc-afraid-to-feel---lf-system" class="nav-link" data-scroll-target="#afraid-to-feel---lf-system">Afraid to Feel - LF System</a>
+  <ul class="collapse">
+  <li><a href="#novelty-function-1-tempo-change-on-beat-drop" id="toc-novelty-function-1-tempo-change-on-beat-drop" class="nav-link" data-scroll-target="#novelty-function-1-tempo-change-on-beat-drop">Novelty function 1: Tempo Change on Beat drop</a></li>
+  <li><a href="#novelty-function-2-slowing-down-the-tempo-at-breakdown" id="toc-novelty-function-2-slowing-down-the-tempo-at-breakdown" class="nav-link" data-scroll-target="#novelty-function-2-slowing-down-the-tempo-at-breakdown">Novelty Function 2: Slowing down the tempo at breakdown</a></li>
+  <li><a href="#tempograms" id="toc-tempograms" class="nav-link" data-scroll-target="#tempograms">Tempograms</a></li>
+  </ul></li>
+  <li><a href="#stop-drugs-in-me-gezicht---gotu-jim" id="toc-stop-drugs-in-me-gezicht---gotu-jim" class="nav-link" data-scroll-target="#stop-drugs-in-me-gezicht---gotu-jim">Stop Drugs (In Me Gezicht) - Gotu Jim</a>
+  <ul class="collapse">
+  <li><a href="#chromagram" id="toc-chromagram" class="nav-link" data-scroll-target="#chromagram">Chromagram</a></li>
+  <li><a href="#keygram" id="toc-keygram" class="nav-link" data-scroll-target="#keygram">Keygram</a></li>
+  <li><a href="#best-matching-key-over-time" id="toc-best-matching-key-over-time" class="nav-link" data-scroll-target="#best-matching-key-over-time">Best-matching key over time</a></li>
+  <li><a href="#conclusion-1" id="toc-conclusion-1" class="nav-link" data-scroll-target="#conclusion-1">Conclusion</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Feature Analysis</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>This part of my portfolio is mainly intended as a space to take a closer look at a number of interesting songs from my corpus. Rather than focusing only on broader patterns across playlists, it highlights individual tracks that stood out to me during the analysis of my corpus. At the same time, it also provides an opportunity to showcase some of the MIR methods I learned in the course by applying them to concrete musical examples.</p>
+</section>
+<section id="outlier-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="outlier-analysis">Outlier analysis</h2>
+<p>In this section, I will discuss some of the outliers that we saw in the corpus exploration.</p>
+<section id="acousticness-in-winter-dance" class="level3">
+<h3 class="anchored" data-anchor-id="acousticness-in-winter-dance">Acousticness in Winter Dance</h3>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 12 × 4
+   playlist     `Track Name`                       `Artist Name(s)` Acousticness
+   &lt;fct&gt;        &lt;chr&gt;                              &lt;chr&gt;                   &lt;dbl&gt;
+ 1 Winter Dance Vibes                              Dimmish                 0.106
+ 2 Winter Dance B.O.T.A. (Baddest Of Them All) - … Eliza Rose;Inte…        0.24 
+ 3 Winter Dance Your Man - Radio Edit              Guilty                  0.192
+ 4 Winter Dance On My Mind - Enzo is Burning Remix Alan Fitzpatric…        0.153
+ 5 Winter Dance Bootman                            Ross from Frien…        0.117
+ 6 Winter Dance Schlafen                           COMPUTER DATA           0.136
+ 7 Winter Dance like me                            paleboi                 0.285
+ 8 Winter Dance Talk To Me You'll Understand       Ross from Frien…        0.664
+ 9 Winter Dance Roach Fingers                      Jesse Bru               0.108
+10 Winter Dance Fork in the Path - David Marston … Life on Planets…        0.196
+11 Winter Dance pass on over                       sunflwr                 0.521
+12 Winter Dance The Way I'm Feeling                Mall Grab               0.197</code></pre>
+</div>
+</div>
+<p>This playlist contains two tracks with unusually high acousticness values, namely <em>Talk to Me You’ll Understand - Ross From Friends</em> and <em>pass on over - sunflwr</em>. My first intuition is to say that both of these songs are a lot more LOFI than the rest of the playlist, but let’s explore their features to find out why their acousticness is higher.</p>
+<p>First of all we are going to plot the loudness and acousticness levels of all the tracks in the playlist, to see how these two tracks compare to the rest of the playlist.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="feature_analysis_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The scatterplot shows that the two acousticness outliers also differ clearly in loudness. <em>Talk To Me You’ll Understand</em> and <em>pass on over</em> are positioned far to the right of the rest of the playlist, confirming that they are much more acoustic than the other Winter Dance tracks. At the same time, both are also among the quieter tracks in the playlist, especially <em>pass on over</em>. This could suggest that their high acousticness is part of a broader difference in production style, rather than just an isolated feature value. While most Winter Dance tracks cluster around very low acousticness and relatively high loudness, these two songs combine a more acoustic sound world with quieter, less forceful production, which supports the impression that they are more lo-fi or organic in character.</p>
+<p>We also want to compare the acoustincess and energy levels of the tracks, to see whether the acousticness outliers also differ in energy from the rest of the playlist.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="feature_analysis_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The energy plot shows a similar pattern, although less strongly than the loudness plot. <em>Talk To Me You’ll Understand</em> and <em>pass on over</em> again stand out as clear acousticness outliers, but in terms of energy they are not quite as separate from the rest of the playlist. Both tracks have relatively moderate energy values rather than the very high values seen in many of the more typical Winter Dance songs. This suggests that their higher acousticness is accompanied by a somewhat softer or less driving character, but the contrast with the rest of the playlist is weaker here than it was for loudness.</p>
+<p>To dive deeper into what makes these songs acoustic, I want to compare them to a song in a similar loudness/energy range, but with much lower acousticness. This song is <em>Like Me - Paleboi</em>. It has even lower energy and loudness than the two acousticness outliers, but it is still a lot less acoustic. Comparing these three songs will hopefully give us a better sense of what the acousticness feature actually captures in this playlist.</p>
+<section id="fever-pitch---treasure-series" class="level4">
+<h4 class="anchored" data-anchor-id="fever-pitch---treasure-series">Fever Pitch - Treasure Series</h4>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="feature_analysis_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="like-me---paleboi" class="level4">
+<h4 class="anchored" data-anchor-id="like-me---paleboi">Like me - PaleBoi</h4>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="feature_analysis_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="pass-on-over---snflower" class="level4">
+<h4 class="anchored" data-anchor-id="pass-on-over---snflower">pass on over - snflower</h4>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="feature_analysis_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="talk-to-me-youll-understand---ross-from-friends" class="level4">
+<h4 class="anchored" data-anchor-id="talk-to-me-youll-understand---ross-from-friends">Talk to Me You’ll Understand - Ross From Friends</h4>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="feature_analysis_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="interpretation" class="level4">
+<h4 class="anchored" data-anchor-id="interpretation">Interpretation</h4>
+<p>The cepstrograms suggest a subtle difference between the less acoustic tracks and the two acousticness outliers. <em>Fever Pitch</em> and <em>Like Me</em>, which have relatively low acousticness but comparable loudness and energy, seem to show somewhat higher magnitudes in the upper timbre bands. In contrast, <em>pass on over</em> and especially <em>Talk To Me You’ll Understand</em> appear to be more concentrated in the lower bands. This points to a broader difference in timbral profile, even if the exact meaning of these bands is not easy to interpret directly.</p>
+<p>Another thing that stands out is that <em>Fever Pitch</em> shows clearer line-like patterns across the bands, which fits with the fact that it is a fairly percussive house track with relatively few instrumental influences. As the tracks become more acoustic, these lines seem to blend together more. This could correspond to the more lo-fi, filtered, or organic feel of the acousticness outliers, although that interpretation remains somewhat speculative. When comparing the songs by ear, I also noticed that the drums seem to become progressively more lo-fi, distorted, or filtered from <em>Fever Pitch</em> to <em>Talk To Me You’ll Understand</em>. That may play a role in why the more acoustic tracks look different here, but the cepstrograms alone are not enough to confirm that with certainty.</p>
+</section>
+<section id="conclusion" class="level4">
+<h4 class="anchored" data-anchor-id="conclusion">Conclusion</h4>
+<p>Overall, the acousticness comparison suggests that the two Winter Dance outliers differ from the rest of the playlist in more than just one Spotify feature. The scatterplots showed that Talk To Me You’ll Understand and pass on over are not only much more acoustic, but also somewhat quieter and slightly less energetic than most of the other tracks. The cepstrograms add to this by suggesting a shift in timbral character: Fever Pitch shows clearer line-like patterns that fit its more percussive house texture, while the more acoustic tracks appear more blended and diffuse. This may correspond to the more lo-fi, filtered, or organic feel of the acousticness outliers. At the same time, it is difficult to draw a really conclusive explanation, since acousticness is likely influenced by multiple factors at once, such as instrumentation, production style, timbral texture, and the overall character of the mix. The main conclusion, then, is that these outliers seem to occupy a different sonic corner of the playlist rather than simply being isolated acousticness anomalies.</p>
+</section>
+</section>
+<section id="tempo-in-summer-chill" class="level3">
+<h3 class="anchored" data-anchor-id="tempo-in-summer-chill">Tempo in Summer Chill</h3>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 4
+  playlist     `Track Name`         `Artist Name(s)`  Tempo
+  &lt;fct&gt;        &lt;chr&gt;                &lt;chr&gt;             &lt;dbl&gt;
+1 Summer Chill Nabi feat. OHHYUK    Peggy Gou;OHHYUK   196.
+2 Summer Chill Can I Call You Rose? Thee Sacred Souls  181.
+3 Summer Chill Peter Pan's Syndrome DJ Rodriguez       202.</code></pre>
+</div>
+</div>
+<p>As you can see there are some pretty serious outliers here. If I remember correctly most of popular music</p>
+</section>
+</section>
+<section id="clocks---coldplay" class="level2">
+<h2 class="anchored" data-anchor-id="clocks---coldplay">Clocks - Coldplay</h2>
+<p>Clocks by Coldplay is a useful example for comparing chroma and timbre representations. The song repeats the same piano pattern and chord loop for most of its duration, while the texture and arrangement still change between sections. That makes it a good case for showing how different MIR representations capture different aspects of musical structure.</p>
+<section id="euclidean-chromagram" class="level3">
+<h3 class="anchored" data-anchor-id="euclidean-chromagram">Euclidean chromagram</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="feature_analysis_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="cepstrogram" class="level3">
+<h3 class="anchored" data-anchor-id="cepstrogram">Cepstrogram</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="feature_analysis_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="timbre-self-similarity-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="timbre-self-similarity-matrix">Timbre self-similarity matrix</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="feature_analysis_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="chroma-self-similarity-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="chroma-self-similarity-matrix">Chroma self-similarity matrix</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="feature_analysis_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="interpretation-1" class="level3">
+<h3 class="anchored" data-anchor-id="interpretation-1">Interpretation</h3>
+<p>Clocks repeats the same piano pattern and chord loop for most of the song. This is clearly visible in the chromagrams, where the same few pitch classes return again and again across the track. The chroma self-similarity matrix also shows a high degree of similarity over time, which matches the fact that the harmony stays mostly the same. The clearest exception appears around 2:32, where there is a noticeable break and the piano shifts to different notes and chords, which is also clearly audible when listening to the song.</p>
+<p>The timbre-based plots highlight sectional changes more clearly. Although the MFCC cepstrogram remains fairly consistent overall, it shifts when the arrangement changes, such as when the drums first enter around 0:21, when the vocals come in around 0:35, when heavier drums appear around 1:20, and during the break at 2:32. The timbre self-similarity matrix also shows clearer block-like regions, suggesting that the overall sound and texture change between sections, even when the chord loop continues underneath.</p>
+</section>
+</section>
+<section id="afraid-to-feel---lf-system" class="level2">
+<h2 class="anchored" data-anchor-id="afraid-to-feel---lf-system">Afraid to Feel - LF System</h2>
+<p>Here, I explore novelty functions and tempograms for Afraid to Feel by LF System. The goal is to compare local peaks in novelty with tempo-related representations from both the DFT and ACT methods. I chose this song because it is one of the few electronic songs I know that seems to contain a clear tempo change. That makes it a good choice for examining whether these representations actually capture that change.</p>
+<section id="novelty-function-1-tempo-change-on-beat-drop" class="level3">
+<h3 class="anchored" data-anchor-id="novelty-function-1-tempo-change-on-beat-drop">Novelty function 1: Tempo Change on Beat drop</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="feature_analysis_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This excerpt focuses on the first drop in the song. A clear pattern in the novelty curve is that the peaks occur closer together after the drop than before it. This suggests that events in the signal are happening more frequently, which is consistent with a tempo increase. In other words, the novelty function seems to reflect the change I hear in the track quite well in this section.</p>
+</section>
+<section id="novelty-function-2-slowing-down-the-tempo-at-breakdown" class="level3">
+<h3 class="anchored" data-anchor-id="novelty-function-2-slowing-down-the-tempo-at-breakdown">Novelty Function 2: Slowing down the tempo at breakdown</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="feature_analysis_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This excerpt shows the section where I hear the tempo slow down during the breakdown. I expected to see the same kind of increase in distance between peaks as in the first novelty plot, but that pattern is much less obvious here. A likely explanation is that this section is less strongly percussive, so there are fewer clear onsets for the novelty function to detect. As a result, the peaks are less sharp and the tempo change is harder to observe directly from the novelty curve alone.</p>
+</section>
+<section id="tempograms" class="level3">
+<h3 class="anchored" data-anchor-id="tempograms">Tempograms</h3>
+<section id="act" class="level4">
+<h4 class="anchored" data-anchor-id="act">ACT</h4>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="feature_analysis_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The ACT makes the tempo changes in the song quite clear. Around t = 20 s, the first drop shows a visible shift in the dominant tempo region, and another change can be seen around t = 60 s, where the breakdown begins. The strongest tempo bands appear to lie around roughly 100 BPM and 125 BPM (this matches online bpm info) . Overall, the ACT representation captures the large-scale tempo structure of the song quite well.</p>
+</section>
+<section id="dft" class="level4">
+<h4 class="anchored" data-anchor-id="dft">DFT</h4>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="feature_analysis_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The DFT shows a very similar general pattern. Here too, the tempo change around t = 20 s and the breakdown around t = 60 s can be identified. Compared to the ACT, the DFT representation seems to emphasize tempo harmonics more clearly, while the ACT gives relatively more prominence to subharmonic relationships. This means that both representations reflect the same rhythmic structure, but they highlight different aspects of the tempo information</p>
+</section>
+</section>
+</section>
+<section id="stop-drugs-in-me-gezicht---gotu-jim" class="level2">
+<h2 class="anchored" data-anchor-id="stop-drugs-in-me-gezicht---gotu-jim">Stop Drugs (In Me Gezicht) - Gotu Jim</h2>
+<p>In this section, I explore the pitch content of <em>Stop Drugs (In Me Gezicht) by Gotu Jim</em> using a chromagram, a keygram and a best-matching key over time plot. I choose this song, because in the last part of the track, something strange seems to happen to the pitch. I hope to find out more about that here.</p>
+<section id="chromagram" class="level3">
+<h3 class="anchored" data-anchor-id="chromagram">Chromagram</h3>
+<p>The chromagram provides a time-based representation of pitch-class activity. It is useful for identifying recurring harmonic patterns and for getting a first impression of the tonal content of the song.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="feature_analysis_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>As expected, we see a clear change in chroma features in the last part of the track, at around 150 seconds. This means that the distribution of prominent notes changes noticeably at that point. In musical terms, this suggests a shift in the harmonic content of the song, which may indicate a change of key or tonal center.</p>
+</section>
+<section id="keygram" class="level3">
+<h3 class="anchored" data-anchor-id="keygram">Keygram</h3>
+<p>The keygram shows how well different major and minor key templates match the chroma features over time. To create the key templates, I first defined the pitch class distributions for a major and minor key based on the Krumhansl-Schmuckler key profiles. Then, I generated templates for all 12 major and 12 minor keys by circularly shifting these profiles.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="feature_analysis_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The dark patches in the plot show keys with a relatively small euclidian distance to the chroma features at that time point, which indicates a better match. We can see that the keygram shows a clear change in the best-matching keys around 150 seconds, which corresponds to the change in chroma features observed in the chromagram. This suggests that there is indeed a shift in the tonal center of the song at that point.</p>
+</section>
+<section id="best-matching-key-over-time" class="level3">
+<h3 class="anchored" data-anchor-id="best-matching-key-over-time">Best-matching key over time</h3>
+<p>To make the key estimation easier to interpret, I also extracted the single best-matching key at each time point instead of only plotting the full keygram. I first converted the chroma data into a format suitable for compmus and then reduced the time resolution by keeping every 50th frame, since key is generally more stable over longer stretches than individual chords.</p>
+<p>Next, I compared each chroma vector to a set of major and minor key templates using compmus_match_pitch_template(). Because lower distance indicates a better match, I then selected the key with the smallest distance at each time point. Plotting these best-matching keys over time results in a simpler and more readable representation, which makes it easier to see whether the estimated key remains stable or changes during the track.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="feature_analysis_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The plot of the best-matching key over time confirms the observations from the chromagram and keygram. There is a clear change in the estimated key around 150 seconds, which indicates a shift in the tonal center of the song. A cool thing to notice is the fact that this plot pretty much extracts the pattern of the blue patches from the keygram, but in a much more readable way. It also shows that the key estimation is not stable, as there are many fluctuations in the estimated key even before the change at 150 seconds. This is because the method is sensitive to small local changes in pitch-class content. If the harmony is somewhat ambiguous or not strongly centered on one key at every moment, several key templates can fit reasonably well. As a result, the best-matching key may fluctuate even when the overall tonal character of the song stays fairly similar.</p>
+</section>
+<section id="conclusion-1" class="level3">
+<h3 class="anchored" data-anchor-id="conclusion-1">Conclusion</h3>
+<p>Overall, the three representations point in the same direction. The chromagram shows a clear change in pitch-class activity in the final part of the track, and both the keygram and the best-matching key plot suggest that this corresponds to a shift in tonal center around 150 seconds. At the same time, the key estimation remains somewhat unstable throughout, which shows that the song is not cleanly captured by a single key at every moment.</p>
+<p>This also suggests a limitation of the keygram approach. In this case, the keygrams seem to be more useful for detecting changes in pitch or tonal center than for assigning one stable key with much confidence. For estimating key over a longer stretch of music, it may therefore be better to start from the chromagram itself, identify the most prominent pitch classes in that section, and then match those to the most likely key (F Major before 150 seconds and D Major afterwards). In that sense, the keygram is helpful as an exploratory tool, but the chromagram may be more reliable for interpreting the actual key over longer time intervals.</p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

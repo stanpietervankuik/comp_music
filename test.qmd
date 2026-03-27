@@ -1,0 +1,113 @@
+---
+title: "Computational Musicology"
+format:
+  html:
+    theme: flatly
+    toc: false
+---
+
+## About me
+
+I am Stan Pieter van Kuik, a student at the University of Amsterdam. This page presents my portfolio for the course *Computational Musicology*.
+
+## Portfolio background
+
+Over the last couple of years, I have noticed that my listening behavior seems to be divided quite strongly by season, especially between summer and winter. I also tend to organize my favorite kinds of music into separate playlists, mainly dance music, hip hop, and chill music that I listen to in order to relax. This made me curious whether that seasonal pattern is actually reflected in the music itself, or whether it is mainly just a feeling.
+
+For this portfolio, I built a corpus based on my own listening behavior. The corpus consists of six playlists: separate winter and summer playlists for dance, hip hop, and chill music. This creates a clear structure for comparison across both season and genre, while keeping the corpus closely connected to music that is personally meaningful to me.
+
+To explore this corpus in a structured way, I will first examine the playlists at the level of individual tracks. This begins with a general corpus exploration using Spotify track-level features, after which I will look more closely at chroma features, loudness, timbre features, and temporal features. After these feature-specific analyses, I will return to the corpus as a whole through classification, regression, and clustering, before concluding with a broader reflection on what I learned from the analysis.
+
+## Portfolio sections
+
+::: {.card}
+### Corpus Exploration
+A first general inspection of the corpus using Spotify track-level features.
+
+[Open page](corpus_exploration.html)
+:::
+
+::: {.card}
+### Chroma Features
+Analysis of harmonic content and pitch-class distributions across the corpus.
+
+[Open page](chroma_features.html)
+:::
+
+::: {.card}
+### Loudness
+Exploration of loudness patterns and how they differ across season and genre.
+
+[Open page](loudness.html)
+:::
+
+::: {.card}
+### Timbre Features
+Analysis of timbral properties and broader sound-world differences within the corpus.
+
+[Open page](timbre_features.html)
+:::
+
+::: {.card}
+### Temporal Features
+Investigation of tempo, rhythm, and other temporal aspects of the playlists.
+
+[Open page](temporal_features.html)
+:::
+
+::: {.card}
+### Classification / Regression
+Using predictive methods to test whether playlist categories can be identified computationally.
+
+[Open page](classification_regression.html)
+:::
+
+::: {.card}
+### Clustering
+Exploring whether tracks group together naturally based on their musical features.
+
+[Open page](clustering.html)
+:::
+
+::: {.card}
+### Conclusions
+Final reflections on the corpus and what I learned from the analyses.
+
+[Open page](conclusions.html)
+:::
+
+## Weekly assignments
+
+::: {.card}
+### Week 7: Computational Musicology and (Audio) Visualisation
+(not available right now, will be added later)
+:::
+
+::: {.card}
+### Week 8: Chroma Features
+(not available right now, will be added later)
+:::
+
+::: {.card}
+### Week 9: Timbre Features / Self-Similarity Matrices
+(not available right now, will be added later)
+:::
+
+::: {.card}
+### Week 10: Key and Chord Estimation
+(not available right now, will be added later)
+:::
+
+::: {.card}
+### Week 11: Novelty Functions and Tempograms
+Analysis of *Afraid to Feel* by LF System
+
+[Open page](week11.html)
+:::
+
+::: {.card}
+### Week 12: Classification and Clustering
+Clustering my Spotify 2025 Wrapped
+
+[Open page](week12.html)
+:::

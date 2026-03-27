@@ -1,0 +1,365 @@
+---
+title: "Classification and Clustering"
+format:
+  html:
+    theme: lumen
+    toc: true
+    toc-location: right
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r}
+library(tidyverse)
+library(tidymodels)
+library(compmus)
+
+
+season_colors <- c(
+  "Winter" = "#3C6980",
+  "Summer" = "#D1945E"
+)
+
+summer_chill <- read_csv("Summer_Chill.csv") |>
+  select(-`Release Date`) |>
+  mutate(
+    season = "Summer",
+    genre = "Chill",
+    playlist = "Summer Chill"
+  )
+
+winter_chill <- read_csv("Winter_Chill.csv") |>
+  select(-`Release Date`) |>
+  mutate(
+    season = "Winter",
+    genre = "Chill",
+    playlist = "Winter Chill"
+  )
+
+summer_dance <- read_csv("Summer_Dance.csv") |>
+  select(-`Release Date`) |>
+  mutate(
+    season = "Summer",
+    genre = "Dance",
+    playlist = "Summer Dance"
+  )
+
+winter_dance <- read_csv("Winter_Dance.csv") |>
+  select(-`Release Date`) |>
+  mutate(
+    season = "Winter",
+    genre = "Dance",
+    playlist = "Winter Dance"
+  )
+
+summer_hip_hop <- read_csv("Summer_Hip_Hop.csv") |>
+  select(-`Release Date`) |>
+  mutate(
+    season = "Summer",
+    genre = "Hip Hop",
+    playlist = "Summer Hip Hop"
+  )
+
+winter_hip_hop <- read_csv("Winter_Hip_Hop.csv") |>
+  select(-`Release Date`) |>
+  mutate(
+    season = "Winter",
+    genre = "Hip Hop",
+    playlist = "Winter Hip Hop"
+  )
+
+corpus <- bind_rows(
+  summer_chill,
+  winter_chill,
+  summer_dance,
+  winter_dance,
+  summer_hip_hop,
+  winter_hip_hop
+) |>
+  mutate(
+    season = factor(season, levels = c("Winter", "Summer")),
+    genre = factor(genre, levels = c("Chill", "Hip Hop", "Dance")),
+    playlist = factor(
+      playlist,
+      levels = c(
+        "Winter Chill", "Summer Chill",
+        "Winter Hip Hop", "Summer Hip Hop",
+        "Winter Dance", "Summer Dance"
+      )
+    )
+  )
+
+find_outliers <- function(data, variable) {
+  split(data, data$playlist) |>
+    purrr::imap_dfr(~ {
+      outlier_values <- boxplot.stats(.x[[variable]])$out
+
+      .x |>
+        filter(.data[[variable]] %in% outlier_values) |>
+        select(
+          playlist,
+          `Track Name`,
+          `Artist Name(s)`,
+          all_of(variable)
+        )
+    })
+}
+```
+
+# Introduction
+Where in last chapter I mainly focused on individual song features, I will now continue on the corpus exploration and dive deeper into corpus wide properties. We will do this by using classification. I chose classification rather than clustering because the main goal of this portfolio is to test whether my listening behavior differs between winter and summer. Since these seasonal labels are already known, classification is a more direct fit, as it allows me to evaluate whether Spotify features can actually distinguish between the two seasons. Clustering is more exploratory, since it searches for groups without using predefined labels, and is therefore less directly aligned with my main question.
+
+# Classification
+
+I will use random forests to test whether Spotify track-level features can distinguish between my winter and summer playlists within each genre. By building separate classifiers for chill, hip hop, and dance, I can examine whether the winter-versus-summer distinction is equally clear across genres, or whether some genres show a much stronger seasonal signal than others. In addition to the classification results themselves, the models also provide feature-importance scores, which help show which Spotify variables contribute most strongly to the seasonal separation.
+
+
+```{r}
+get_conf_mat <- function(fit) {
+  outcome <- tune::.get_tune_outcome_names(fit)
+  fit |>
+    collect_predictions() |>
+    conf_mat(truth = all_of(outcome), estimate = .pred_class)
+}
+
+get_pr <- function(fit) {
+  fit |>
+    conf_mat_resampled() |>
+    group_by(Prediction) |>
+    mutate(precision = Freq / sum(Freq)) |>
+    group_by(Truth) |>
+    mutate(recall = Freq / sum(Freq)) |>
+    ungroup() |>
+    filter(Prediction == Truth) |>
+    select(class = Prediction, precision, recall)
+}
+
+run_genre_rf <- function(data, genre_name, seed = 42) {
+  genre_data <- data |>
+    filter(genre == genre_name) |>
+    mutate(season = factor(season, levels = c("Winter", "Summer")))
+
+  genre_recipe <-
+    recipe(
+      season ~
+        Danceability +
+        Energy +
+        Loudness +
+        Speechiness +
+        Acousticness +
+        Instrumentalness +
+        Liveness +
+        Valence +
+        Tempo +
+        `Duration (ms)` +
+        Popularity,
+      data = genre_data
+    ) |>
+    step_center(all_predictors()) |>
+    step_scale(all_predictors())
+
+  set.seed(seed)
+  genre_cv <- genre_data |>
+    vfold_cv(v = 5, strata = season)
+
+  forest_model <-
+    rand_forest() |>
+    set_mode("classification") |>
+    set_engine("ranger", importance = "impurity", seed = seed)
+
+  set.seed(seed)
+  genre_fit <-
+    workflow() |>
+    add_recipe(genre_recipe) |>
+    add_model(forest_model) |>
+    fit_resamples(
+      genre_cv,
+      control = control_resamples(save_pred = TRUE)
+    )
+
+  set.seed(seed)
+  genre_importance <-
+    workflow() |>
+    add_recipe(genre_recipe) |>
+    add_model(forest_model) |>
+    fit(genre_data) |>
+    pluck("fit", "fit", "fit") |>
+    ranger::importance() |>
+    enframe() |>
+    mutate(name = fct_reorder(name, value))
+
+  list(
+    data = genre_data,
+    fit = genre_fit,
+    importance = genre_importance
+  )
+}
+
+rf_chill  <- run_genre_rf(corpus, "Chill", seed = 42)
+rf_hiphop <- run_genre_rf(corpus, "Hip Hop", seed = 42)
+rf_dance  <- run_genre_rf(corpus, "Dance", seed = 42)
+```
+
+
+### Chill
+
+```{r}
+rf_chill$fit |>
+  get_conf_mat() |>
+  autoplot(type = "mosaic")
+```
+
+```{r}
+rf_chill$fit |>
+  get_pr()
+```
+
+The classifier performs reasonably well for Chill and does so in a fairly balanced way across the two seasons. The precision and recall scores are very similar for Winter and Summer, all lying 0.71 and 0.75, which suggests that the model is not strongly biased toward one class. The mosaic plot reflects this as well: the largest areas correspond to correct classifications, while the wrongly classified songs take up noticeably less space. This suggests that winter and summer chill songs overlap to some extent, but still differ enough in feature space to be separated with a decent level of accuracy.
+
+
+
+```{r}
+rf_chill$importance |>
+  ggplot(aes(name, value)) +
+  geom_col(fill = "#3C6980") +
+  coord_flip() +
+  theme_minimal() +
+  labs(
+    title = "Feature Importance - Chill",
+    x = NULL,
+    y = "Importance"
+  )
+```
+
+The feature-importance plot suggests that the seasonal distinction in Chill is driven most strongly by valence and speechiness. Valence stands out as the single most important feature by a clear margin, while speechiness is the second strongest predictor. **This fits well with the earlier corpus exploration, where summer chill appeared more positive overall and winter chill extended further toward more speech-like material.** The remaining features, such as tempo, loudness, and energy, still contribute to the classification, but they seem to play a more secondary role.
+
+```{r}
+corpus |>
+  filter(genre == "Chill") |>
+  ggplot(aes(x = Speechiness, y = Valence, color = season)) +
+  geom_point(size = 2.5, alpha = 0.8) +
+  stat_ellipse() +
+  scale_color_manual(values = season_colors) +
+  labs(
+    title = "Chill: Valence vs Speechiness",
+    x = "Speechiness",
+    y = "Valence",
+    color = "Season"
+  ) +
+  theme_minimal()
+```
+
+The scatterplot helps make the classifier results more interpretable by showing how the two most important features, valence and speechiness, work together. Summer chill songs cluster fairly tightly in a region with high valence and low speechiness, while winter chill songs are much more spread out. In particular, winter chill extends further toward both lower valence and higher speechiness values.
+
+
+
+### Hip Hop
+```{r}
+rf_hiphop$fit |>
+  get_conf_mat() |>
+  autoplot(type = "mosaic")
+```
+
+```{r}
+rf_hiphop$fit |>
+  get_pr()
+```
+
+The classification results for Hip Hop are clearly weaker than for Chill. The precision and recall scores are lower overall, especially for Winter, which has a precision of 0.56 and a recall of only 0.483. This means that the model misses a fairly large share of the actual winter hip hop songs. Summer performs somewhat better, with a precision of 0.605 and a recall of 0.676, but the separation is still only moderate. The mosaic plot reflects this as well: the correctly classified areas are only somewhat larger than the misclassified ones, which suggests that winter and summer hip hop songs overlap quite strongly in feature space.
+
+```{r}
+rf_hiphop$importance |>
+  ggplot(aes(name, value)) +
+  geom_col(fill = "#3C6980") +
+  coord_flip() +
+  theme_minimal() +
+  labs(
+    title = "Feature Importance - Hip Hop",
+    x = NULL,
+    y = "Importance"
+  )
+```
+
+The feature-importance plot suggests that the winter-versus-summer distinction in hip hop is not driven by one single dominant musical feature, but rather by a broader combination of variables. Loudness stands out as the most important predictor, followed by duration, popularity, speechiness, and valence. After that, the remaining features contribute at fairly similar levels. This fits the impression from the classification results that winter and summer hip hop songs overlap quite strongly in feature space: the model does not seem to rely on one especially clear separating dimension, but instead draws on a mix of relatively modest signals. In other words, the boundary between the two seasons appears to be more diffuse and distributed across several features rather than sharply defined by just one or two.
+
+
+### Dance
+
+```{r}
+
+rf_dance$fit |>
+  get_conf_mat() |>
+  autoplot(type = "mosaic")
+```
+
+
+```{r}
+rf_dance$fit |>
+  get_pr()
+```
+
+The classification results for Dance are clearly stronger than for Hip Hop and also somewhat stronger than for Chill. The precision scores are similar for Winter and Summer, which suggests that when the model predicts a season, it is pretty equally reliable for both classes. The recall values tell a more uneven story, however. Summer reaches a recall of 0.811, while Winter only reaches 0.648. This means that the model is much better at recovering the actual summer dance songs than the actual winter dance songs. In practice, a relatively large share of winter tracks is still being classified as summer, even though predictions labeled as Winter are fairly accurate when they do occur. The mosaic plot reflects this as well: the correctly classified areas are clearly larger than the misclassified ones overall
+
+
+```{r}
+rf_dance$importance |>
+  ggplot(aes(name, value)) +
+  geom_col(fill = "#3C6980") +
+  coord_flip() +
+  theme_minimal() +
+  labs(
+    title = "Feature Importance - Dance",
+    x = NULL,
+    y = "Importance"
+  )
+```
+
+The feature-importance plot shows that the seasonal distinction in Dance is driven most strongly by tempo. It stands out by a large margin as the single most important predictor, with energy clearly in second place. After that, the remaining features contribute much less and are relatively similar in importance. This suggests that the winter-versus-summer separation in dance music is mainly tied to differences in speed and intensity, rather than to a broad combination of equally strong features.
+
+```{r}
+dance_misclassified_ids <- rf_dance$fit |>
+  collect_predictions() |>
+  filter(season == "Winter", .pred_class == "Summer") |>
+  left_join(
+    rf_dance$data |>
+      mutate(.row = row_number()) |>
+      select(.row, `Track Name`, `Artist Name(s)`),
+    by = ".row"
+  ) |>
+  distinct(`Track Name`, `Artist Name(s)`)
+
+dance_plot_data <- corpus |>
+  filter(genre == "Dance") |>
+  left_join(
+    dance_misclassified_ids |>
+      mutate(misclassified = TRUE),
+    by = c("Track Name", "Artist Name(s)")
+  ) |>
+  mutate(misclassified = replace_na(misclassified, FALSE))
+
+ggplot(dance_plot_data, aes(x = Tempo, y = Energy, color = season)) +
+  geom_point(size = 2.5, alpha = 0.8) +
+  stat_ellipse() +
+  geom_point(
+    data = dance_plot_data |> filter(misclassified),
+    shape = 1,
+    size = 5,
+    stroke = 1.2,
+    color = "red"
+  ) +
+  scale_color_manual(values = season_colors) +
+  labs(
+    title = "Dance: Tempo vs Energy",
+    x = "Tempo (BPM)",
+    y = "Energy",
+    color = "Season"
+  ) +
+  theme_minimal()
+```
+
+
+The scatterplot helps make the dance classification results more interpretable by showing how the two most important features, tempo and energy, work together. In general, winter dance songs tend to occupy the somewhat faster and more energetic part of the space, while summer dance songs are more concentrated in a slightly lower-energy and lower-tempo region. At the same time, the two groups still overlap quite substantially, which helps explain why the classifier does not perfectly separate them.
+
+The red circles mark the winter dance songs that were misclassified as summer. I added these to better understand why winter recall was noticeably lower than summer recall. Most of these highlighted songs fall within or close to the area where the winter and summer clusters overlap. This suggests that the model especially struggles with winter tracks whose tempo and energy profile resembles that of the summer playlist.

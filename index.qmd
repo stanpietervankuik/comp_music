@@ -3,7 +3,9 @@ title: "Computational Musicology"
 format: 
   dashboard:
     orientation: columns
-    theme: flatly
+    theme:
+      - flatly
+      - custom.scss
     toc: false
 ---
 
@@ -33,32 +35,55 @@ format:
 
 ::: {.card}
 ### Week 11: Novelty Functions and Tempograms
-Analysis of Afraid to Feel by LF System
+Analysis of *Afraid to Feel* by LF System
 
 [Open page](week11.html)
-
 :::
 
 ::: {.card}
-### Week 12: Classification and clustering
-Clustering my spotify 2025 wrapped 
+### Week 12: Classification and Clustering
+Clustering my Spotify 2025 Wrapped
 
 [Open page](week12.html)
-
 :::
 
 # Portfolio {width=50%}
 
-## Portfolio
+## Portfolio sections
 
-### About me
+::: {.card}
+### Background
+Motivation, corpus design, and portfolio structure.
 
-I am Stan Pieter van Kuik, a student at the University of Amsterdam. This page show my portfolio for the course *Computational Musicology*.
+[Open page](portfolio/background.html)
+:::
 
-### Course focus
+::: {.card}
+### Corpus Exploration
+A first general inspection of the corpus using Spotify track-level features.
 
-In this portfolio, I explore music using computational methods such as audio visualisation, chroma analysis, timbre features, self-similarity matrices, key estimation, chord estimation, novelty functions, and tempograms.
+[Open page](portfolio/corpus_exploration.html)
+:::
 
-### GitHub Repository
+::: {.card}
+### Feature Analysis
+Chroma, loudness, timbre, and temporal features.
 
-[View repository](https://github.com/stanpietervankuik/comp_music.git)
+[Open page](portfolio/feature_analysis.html)
+:::
+
+::: {.card}
+### Classification and Clustering
+A broader corpus-level analysis.
+
+[Open page](portfolio/classification_clustering.html)  
+
+:::
+
+
+::: {.card}
+### Conclusion
+What have we learned from this set of analyses? 
+
+[Open page](conclusion.html)
+:::

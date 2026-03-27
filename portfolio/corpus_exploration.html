@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Corpus Exploration</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="corpus_exploration_files/libs/clipboard/clipboard.min.js"></script>
+<script src="corpus_exploration_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="corpus_exploration_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="corpus_exploration_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="corpus_exploration_files/libs/quarto-html/popper.min.js"></script>
+<script src="corpus_exploration_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="corpus_exploration_files/libs/quarto-html/anchor.min.js"></script>
+<link href="corpus_exploration_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="corpus_exploration_files/libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="corpus_exploration_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="corpus_exploration_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="corpus_exploration_files/libs/bootstrap/bootstrap-a5cc46ccaf4f09d2973d35409a5d0150.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#corpus-size" id="toc-corpus-size" class="nav-link" data-scroll-target="#corpus-size">Corpus size</a></li>
+  <li><a href="#musical-features" id="toc-musical-features" class="nav-link" data-scroll-target="#musical-features">Musical features</a>
+  <ul class="collapse">
+  <li><a href="#energy" id="toc-energy" class="nav-link" data-scroll-target="#energy">Energy</a></li>
+  <li><a href="#valence" id="toc-valence" class="nav-link" data-scroll-target="#valence">Valence</a></li>
+  <li><a href="#tempo" id="toc-tempo" class="nav-link" data-scroll-target="#tempo">Tempo</a></li>
+  <li><a href="#acousticness" id="toc-acousticness" class="nav-link" data-scroll-target="#acousticness">Acousticness</a></li>
+  <li><a href="#speechiness" id="toc-speechiness" class="nav-link" data-scroll-target="#speechiness">Speechiness</a></li>
+  <li><a href="#loudness" id="toc-loudness" class="nav-link" data-scroll-target="#loudness">Loudness</a></li>
+  <li><a href="#liveness" id="toc-liveness" class="nav-link" data-scroll-target="#liveness">Liveness</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Corpus Exploration</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>In this page, I provide a first general inspection of my corpus. The corpus consists of six playlists divided by both season and genre: summer and winter playlists for dance, hip hop, and chill music. The goal of this first exploration is not yet to draw detailed conclusions, but rather to get a clear overview of the corpus and examine a few broad patterns in the Exportify variables.</p>
+</section>
+<section id="corpus-size" class="level2">
+<h2 class="anchored" data-anchor-id="corpus-size">Corpus size</h2>
+<p>Before looking at musical features, it is useful to first inspect the size of each playlist. This provides a basic overview of how the corpus is distributed across the six categories.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="corpus_exploration_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="musical-features" class="level2">
+<h2 class="anchored" data-anchor-id="musical-features">Musical features</h2>
+<p>After looking at the overall size of the corpus, I now turn to a number of Spotify musical features. These variables give a broad first impression of aspects such as energy, mood, acoustic character and more. Although they simplify complex musical qualities, they are useful for exploring how the six playlists may differ from one another and for identifying broader patterns across season and genre. I use boxplots here rather than violin plots because they provide a clearer first overview of the distributions. They make it easier to compare medians, spread, and outliers across playlists, which is especially helpful in an exploratory analysis like this.</p>
+<section id="energy" class="level3">
+<h3 class="anchored" data-anchor-id="energy">Energy</h3>
+<p>Energy gives a first impression of the overall intensity of the tracks in each playlist. This represents a perceptual measure of intensity and activity. Typically, energetic tracks feel fast, loud, and noisy.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="corpus_exploration_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Energy is clearly highest in the dance playlists, which makes sense because dance music is generally built around stronger rhythmic drive, louder production, and a more intense overall sound than chill or hip hop. Within dance, winter dance stands out as especially energetic compared to summer dance. A possible explanation is that my winter dance playlist contains more fast-paced, high-intensity tracks, whereas my summer dance playlist leans slightly more toward laidback or “sunshine” dance music. This is something we could look into. In the chill and hip hop playlists, summer appears to have slightly higher energy than winter, although these differences are fairly small. Finally, for the summer chill playlist the distribution seems to be more dispersed than for winter chill, which could suggest that it includes a broader mix of track types. That would be interesting to examine more closely later on. On top of that, I see some serious outliers in the winter chill playlist, which could be cool to look into in our feature-analysis as well.</p>
+</section>
+<section id="valence" class="level3">
+<h3 class="anchored" data-anchor-id="valence">Valence</h3>
+<p>Valence is Spotify’s estimate of how positive or uplifting a track sounds. Although this is a simplified variable, it is useful for gaining a first overview of the mood profile of the corpus.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="corpus_exploration_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Valence seems to be higher in the summer playlists than in the winter playlists for all three genres. In other words, the summer playlists generally appear more positive or uplifting. This difference is especially noticeable in the chill playlists, which surprises me a bit, since I would have expected the seasonal gap to be more comparable across genres. Hip hop and dance show the same overall trend, but a little less strongly.</p>
+</section>
+<section id="tempo" class="level3">
+<h3 class="anchored" data-anchor-id="tempo">Tempo</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="corpus_exploration_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Tempo shows a somewhat more mixed pattern than energy or valence. The dance playlists seem the most consistent, with both winter and summer dance concentrated around a fairly narrow BPM range, and winter dance only slightly higher than summer dance. This is to be expected tough, as house/dance music tends to be centered around 125 bpm. Something that does interest me is the fact that winter dance has a sligtly higher tempo, as this correlates with the idea that my winter dance playlist contains more fast-paced, high energy songs than my summer dance playlist. In contrast, the chill and the hip hop playlists show much more spread and don’t differ much between seasons.</p>
+<p>Something that does catch my eye though, are the outliers in the summer chill playlist and the relatively high tempo in the upper quadrant of the summer hip-hop playlist. Perhaps these could be tempo’s that are misinterpreted as double time. This is something we can definitly look into in the feature class analysis.</p>
+</section>
+<section id="acousticness" class="level3">
+<h3 class="anchored" data-anchor-id="acousticness">Acousticness</h3>
+<p>Acousticness is Spotify’s estimate of how acoustic a track sounds. Higher values suggest a more acoustic or less synthetic sound world.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="corpus_exploration_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The main thing that stands out is the lack of acousticness for dance music. This makes sense though, as dance music is typically built around electronic production and synthetic sounds, so it would be expected to have low acousticness. The chill and hip hop playlists show more variation in acousticness, with some tracks having higher values that suggest a more acoustic sound world. This could be due to the presence of more organic instrumentation or production styles in those genres.</p>
+<p>What also stands out is the presence of several outliers in the winter dance playlist. Most of that playlist has extremely low acousticness, so an outlier around 0.65 is quite striking. That could point to a track that differs strongly from the rest of the playlist, perhaps because it contains unusually acoustic instrumentation or simply falls outside the general sound world of the winter dance selection.</p>
+</section>
+<section id="speechiness" class="level3">
+<h3 class="anchored" data-anchor-id="speechiness">Speechiness</h3>
+<p>Speechiness measures how speech-like a track is. This is particularly relevant for this corpus because hip hop tracks may stand out more strongly on this variable than chill or dance tracks.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="corpus_exploration_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Speechiness shows a clear genre pattern overall, with the hip hop playlists standing out as the most speech-like. That makes sense, since hip hop typically contains more rapped or spoken vocal delivery than chill or dance music. At the same time, the plot also suggests that the boundaries between my playlists are not completely clean. Summer chill and the two dance playlists look fairly similar, with relatively low speechiness and only a few higher outliers. In contrast, winter chill looks closer to the hip hop playlists, with a higher spread and a number of tracks reaching much more speech-like values.</p>
+<p>This could suggest that my summer chill playlist contains more dance-like songs, while my winter chill playlist may lean a bit more toward hip hop-like material. So although speechiness mostly behaves as expected, it also hints that the chill playlists may partly overlap with different neighboring genres depending on the season.</p>
+</section>
+<section id="loudness" class="level3">
+<h3 class="anchored" data-anchor-id="loudness">Loudness</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="corpus_exploration_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Loudness appears to vary less across the playlists than many of the other Spotify features. The distributions are fairly similar overall, with only modest differences in median and spread. A likely explanation is that many tracks on Spotify are mastered according to similar modern production standards, which tend to keep perceived loudness relatively high across genres. As a result, loudness may be less informative here for distinguishing between playlists than features such as energy, valence, or acousticness.</p>
+</section>
+<section id="liveness" class="level3">
+<h3 class="anchored" data-anchor-id="liveness">Liveness</h3>
+<p>Liveness is Spotify’s estimate of how likely a track is to be a live recording rather than a studio recording. Higher values suggest more characteristics associated with live performance, such as audience noise or room ambience.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="corpus_exploration_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
