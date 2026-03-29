@@ -290,13 +290,6 @@ Another thing that stands out is that *Fever Pitch* shows clearer line-like patt
 
 Overall, the acousticness comparison suggests that the two Winter Dance outliers differ from the rest of the playlist in more than just one Spotify feature. The scatterplots showed that Talk To Me You’ll Understand and pass on over are not only much more acoustic, but also somewhat quieter and slightly less energetic than most of the other tracks. The cepstrograms add to this by suggesting a shift in timbral character: Fever Pitch shows clearer line-like patterns that fit its more percussive house texture, while the more acoustic tracks appear more blended and diffuse. This may correspond to the more lo-fi, filtered, or organic feel of the acousticness outliers. At the same time, it is difficult to draw a really conclusive explanation, since acousticness is likely influenced by multiple factors at once, such as instrumentation, production style, timbral texture, and the overall character of the mix. The main conclusion, then, is that these outliers seem to occupy a different sonic corner of the playlist rather than simply being isolated acousticness anomalies.
 
-### Tempo in Summer Chill
-```{r}
-find_outliers(corpus, "Tempo") |>
-  filter(playlist == "Summer Chill")
-```
-
-As you can see there are some pretty serious outliers here. If I remember correctly most of popular music 
 
 ## Clocks - Coldplay
 Clocks by Coldplay is a useful example for comparing chroma and timbre representations. The song repeats the same piano pattern and chord loop for most of its duration, while the texture and arrangement still change between sections. That makes it a good case for showing how different MIR representations capture different aspects of musical structure.
